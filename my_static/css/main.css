@@ -1,0 +1,19 @@
+.book_list {
+    display: flex;
+    flex-direction: column;
+}
+
+.book_card {
+    display: flex;
+    border: 6px outset #70bbec;
+    border-radius: 10px;
+    margin: 10px;
+    padding: 5px;
+
+
+}
+
+.book_card_image {
+    width: 90px;
+    margin-right: 5px;
+}
