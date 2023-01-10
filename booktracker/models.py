@@ -34,6 +34,7 @@ class Book(models.Model):
     class Meta:
         verbose_name = 'Книга'
         verbose_name_plural = 'Книги'
+        unique_together = ('title', 'page_num', 'author')
 
     def __str__(self):
         return self.title
