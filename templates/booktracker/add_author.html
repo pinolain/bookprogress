@@ -2,19 +2,11 @@
 
 {% block title %}
 
-Добавить книгу
+Добавить автора
 
 {% endblock %}
 
 {% block content %}
-
-{% if form.errors %}
-    <div class="alert alert-danger">
-        {{ form.errors }}
-    </div>
-{% endif %}
-
-
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

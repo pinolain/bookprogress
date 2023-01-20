@@ -4,7 +4,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 
 urlpatterns = [
-    path('book_list', views.book_list),
+    path('booklist', views.book_list),
     path('login/', LoginView.as_view()),
-    path('add_book/', views.add_book)
+    path('addbook/', views.add_book),
+    path('mybooks', views.mybooks),
+    path('book/<int:id>', views.book_read),
+    path('book/<int:id>/add', views.add_book_to_list)
 ]

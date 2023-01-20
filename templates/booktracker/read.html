@@ -1,0 +1,15 @@
+{% extends 'booktracker/general.html' %}
+
+{% block title %}
+Личный кабинет
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+  <button type="submit">Прочёл</button>
+</form>
+
+{% endblock %}
+

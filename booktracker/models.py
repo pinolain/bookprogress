@@ -28,7 +28,7 @@ class Mood(models.Model):
 class Book(models.Model):
     title = models.CharField('Название книги', max_length=155)
     page_num = models.IntegerField('Количество страниц')
-    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True, blank=False, verbose_name='Автор книги')
+    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор книги')
     translator = models.CharField('Переводчики', max_length=255, null=True, blank=True)
 
     class Meta:
@@ -66,6 +66,7 @@ class BookUsers(models.Model): #"Связь книга - пользовател�
     class Meta:
         verbose_name = 'Книг пользователя'
         verbose_name_plural = 'Книги пользователя'
+        unique_together = ('user', 'book')
 
     def __str__(self):
         return f'{self.book} Статус {self.complete}'
@@ -81,6 +82,7 @@ class ObjectiveYear(models.Model): #"Цель на количество книг
 
     def __str__(self):
         return str(self.goal_year)
+
 
 class ObjectiveReadingBook(models.Model): #"Цель на дату к которой нужно дочитать книгу"
     book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name= 'Книга')

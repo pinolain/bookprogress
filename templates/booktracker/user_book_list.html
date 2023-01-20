@@ -1,23 +1,23 @@
 {% extends 'booktracker/general.html' %}
 
-{% block title %} Список книг {% endblock %}
+{% block title %} Список книг пользователя {% endblock %}
 
 {% block content %}
   <div class="book_list">
-    {% for book in book_list %}
+    {% for book in mybooks %}
       <div class="book_card">
         <div class="book_card_image">
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqR_RM_UqMS0KJBo4Sn7DJeWWNNyCTua1vJg&usqp=CAU"
                width="100%" alt="Тест обложка">
         </div>
         <div class="infobloc">
-          <div>{{ book.title }}</div>
-          <div>{{ book.author }}</div>
-          <div>{{ book.page_num }}</div>
+          <a class="title" href="book/{{ book.book.id }}">{{ book.book.title }}</a>
+          <div>{{ book.book.author }}</div>
+          <div>{{ book.book.page_num }}</div>
+          <div>{{ book.complete }}</div>
         </div>
         <div class="actionbar">
-          <input type="button" >
-          <a href="book/{{ book.id }}/add">Добавить книгу</a>
+          <input type="button">
         </div>
       </div>
     {% endfor %}
