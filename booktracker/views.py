@@ -2,11 +2,19 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Author, BookUsers, Book, Progres
 from .forms import BookForm, ProgresForm, ProgresFormBook, AuthorForm
+from django.views.generic.list import ListView
 # Create your views here.
 @login_required
 def book_list(request):
     book_lst = Book.objects.all()
     return render(request, "booktracker/book_list.html", {'book_list': book_lst})
+
+
+class BookList(ListView):
+    model = Book
+    template_name = 'booktracker/book_list.html'
+
+
 
 
 def add_book(request):
