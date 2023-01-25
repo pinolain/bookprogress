@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import Author, BookUsers, Book, Progres
-from .forms import BookForm, ProgresForm, ProgresFormBook, AuthorForm
+from booktracker.models import Author, BookUsers, Book, Progres
+from booktracker.forms import BookForm, ProgresForm, ProgresFormBook, AuthorForm
 # Create your views here.
 @login_required
 def book_list(request):
