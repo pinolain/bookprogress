@@ -6,11 +6,10 @@ from booktracker.forms import BookForm, ProgresForm, ProgresFormBook, AuthorForm
 from django.views.generic import View, TemplateView, FormView, ListView, DetailView, CreateView
 
 
-
-@login_required
-def book_list(request):
-    book_lst = Book.objects.all()
-    return render(request, "booktracker/book_list.html", {'book_list': book_lst})
+class BookList(View):
+    def get(self, request, *args, **kwargs):
+        book_lst = Book.objects.all()
+        return render(self.request, "booktracker/book_list.html", {'book_list': book_lst})
 
 
 def add_book(request):
@@ -37,9 +36,49 @@ def add_book(request):
         return render(request, "booktracker/add_book.html", {'form': book})
 
 
+class AddBook(View):
+
+    def get(self, request, *args, **kwargs):
+        form = BookForm()
+        return render(request, "booktracker/add_book.html", {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        def add_book(request):
+            if request.method == 'GET':
+                form = BookForm()
+                return render(request, "booktracker/add_book.html", {'form': form})
+            book = BookForm(request.POST)
+            if book.is_valid():
+                author = book.data.get('author')
+                new_author = book.data.get('new_author')
+                if (author and new_author) or (not (author or new_author)):
+                    return render(request, 'booktracker/404.html', status=404)
+
+                if author:
+                    book.save()
+                if new_author:
+                    new_author_obj = Author.objects.create(name=book.data.get('new_author'))
+                    new_book = book.save(commit=False)
+                    new_book.author = new_author_obj
+                    new_book.save()
+                return redirect('cbv/booklist')
+            else:
+                print(book.errors)
+                return render(request, "booktracker/add_book.html", {'form': book})
+
+
 def mybooks(request):
     mybooks = BookUsers.objects.filter(user_id=request.user.id)
     return render(request, "booktracker/user_book_list.html", {'mybooks': mybooks})
+
+
+class UserBookList(TemplateView):
+    template_name = 'booktracker/user_book_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mybooks'] = BookUsers.objects.filter(user_id=self.request.user.id)
+        return context
 
 
 def book_read(request, id):
@@ -63,6 +102,23 @@ def book_read(request, id):
         instance.book = book
         instance.save()
         return redirect(book_read, id)
+
+
+class CreateBookProgress(FormView):
+
+    form_class = ProgresFormBook
+    template_name = 'booktracker/book.html'
+    def get_initial(self):
+        try:
+            book = Book.objects.get(id=self.kwargs.get('id'))
+        except Book.DoesNotExist:
+            return render(self.request, 'booktracker/404.html', status=404)
+        last_progres = Progres.objects.filter(book=book, user_id=self.request.user.id).order_by('-end_time').first()
+        if last_progres:
+            start_page = last_progres.end_page
+        else:
+            start_page = 0
+        return {'start_page': start_page}
 
 
 def add_book_to_list(request, id):
