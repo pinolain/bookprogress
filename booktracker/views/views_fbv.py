@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from booktracker.models import Author, BookUsers, Book, Progres
+from booktracker.models import Author, BookUsers, Book, Progres, Attachment
 from booktracker.forms import BookForm, ProgresForm, ProgresFormBook, AuthorForm
 # Create your views here.
 @login_required
@@ -64,6 +64,10 @@ def book_read(request, id):
 def add_book_to_list(request, id):
     book_user = BookUsers.objects.create(user=request.user, book_id=id)
     return redirect(mybooks)
+
+def add_attachment(request, id):
+
+
 
 
 

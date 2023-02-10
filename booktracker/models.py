@@ -54,14 +54,27 @@ class Progres(models.Model):
         verbose_name_plural = 'Чтения'
 
     def __str__(self):
-        return f'{self.book.title}-{self.user.username}-{str(self.end_time)}'         #str(self.book)
+        return f'{self.book.title}-{self.user.username}-{str(self.end_time)}'  # str(self.book)
 
 
-class BookUsers(models.Model): #"Связь книга - пользователь"
+class BookStatus(models.Model):
+    name = models.CharField(max_length=30)
+
+    class Meta:
+        verbose_name = 'Статус книги'
+        verbose_name_plural = 'Статусы книг'
+
+    def __str__(self):
+        return self.name
+
+
+class BookUsers(models.Model):  # "Связь книга - пользователь"
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     book = models.ForeignKey(Book, on_delete=models.DO_NOTHING, verbose_name='Книга')
-    complete = models.BooleanField('Читаю/прочитана', default=False)
-    completed_date = models.DateField('Прочитано кнги', null=True, blank=True)
+    completed_date = models.DateField('Дочитана', null=True, blank=True)
+    planed_complete = models.DateField('Нужно дочитать', null=True, blank=True)
+    review = models.TextField(null=True, blank=True)
+    status = models.ForeignKey(BookStatus, on_delete=models.RESTRICT, null=False, blank=False)
 
     class Meta:
         verbose_name = 'Книг пользователя'
@@ -69,10 +82,18 @@ class BookUsers(models.Model): #"Связь книга - пользовател�
         unique_together = ('user', 'book')
 
     def __str__(self):
-        return f'{self.book} Статус {self.complete}'
+        return f'{self.book} {self.user.name}'
 
 
-class ObjectiveYear(models.Model): #"Цель на количество книг в год"
+class Attachment(models.Model):
+    text = models.TextField()
+    bookusers = models.ForeignKey(BookUsers, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Цитаты из книги'
+
+
+class ObjectiveYear(models.Model):  # "Цель на количество книг в год"
     goal_year = models.IntegerField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -84,8 +105,8 @@ class ObjectiveYear(models.Model): #"Цель на количество книг
         return str(self.goal_year)
 
 
-class ObjectiveReadingBook(models.Model): #"Цель на дату к которой нужно дочитать книгу"
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name= 'Книга')
+class ObjectiveReadingBook(models.Model):  # "Цель на дату к которой нужно дочитать книгу"
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='Книга')
     goal_read_book = models.DateField('Закончить к ')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
 
@@ -97,9 +118,9 @@ class ObjectiveReadingBook(models.Model): #"Цель на дату к котор
         return f'{self.user.username} {self.book.title} К {self.goal_read_book}'
 
 
-class BookReview(models.Model): #"Оценка книги после прочтения, и отзыв на неё"
+class BookReview(models.Model):  # "Оценка книги после прочтения, и отзыв на неё"
     title = models.CharField('Заголовок', max_length=155)
-    text = models.TextField('Мюсли')
+    text = models.TextField('Мои мысли о книге')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='Книга')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь')
     rating = models.IntegerField('Оценка')
@@ -110,6 +131,3 @@ class BookReview(models.Model): #"Оценка книги после прочт�
 
     def __str__(self):
         return self.title
-
-
-

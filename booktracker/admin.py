@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Book, Author, Progres, Mood, BookReview, BookUsers, ObjectiveReadingBook, ObjectiveYear
+from .models import Book, Author, Progres, Mood, BookReview, BookUsers, ObjectiveReadingBook, ObjectiveYear, BookStatus
 
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'page_num', 'author', 'translator')
     list_filter = ('id',)
+
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
@@ -29,7 +30,7 @@ class BookReviewAdmin(admin.ModelAdmin):
 
 @admin.register(BookUsers)
 class BookUsersAdmin(admin.ModelAdmin):
-    list_display = ('id', 'book', 'user', 'complete')
+    list_display = ('id', 'book', 'user', 'status')
 
 
 @admin.register(ObjectiveReadingBook)
@@ -40,3 +41,9 @@ class ObjectiveReadingBookAdmin(admin.ModelAdmin):
 @admin.register(ObjectiveYear)
 class ObjectiveYearAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'goal_year')
+
+
+
+@admin.register(BookStatus)
+class BookStatusAdmin(admin.ModelAdmin):
+    list_display = ('name', )
