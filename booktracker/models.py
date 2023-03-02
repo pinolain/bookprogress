@@ -56,6 +56,12 @@ class Progres(models.Model):
     def __str__(self):
         return f'{self.book.title}-{self.user.username}-{str(self.end_time)}'  # str(self.book)
 
+    @property
+    def fully_filled(self):
+        if self.end_time and self.end_page:
+            return True
+        return False
+
 
 class BookStatus(models.Model):
     name = models.CharField(max_length=30)
@@ -87,7 +93,9 @@ class BookUsers(models.Model):  # "Связь книга - пользовате�
 
 class Attachment(models.Model):
     text = models.TextField()
-    bookusers = models.ForeignKey(BookUsers, on_delete=models.CASCADE)
+    bookusers = models.ForeignKey(BookUsers, on_delete=models.CASCADE, verbose_name='Пользователь')
+    page_attachment = models.IntegerField(null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Цитаты из книги'

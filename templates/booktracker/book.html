@@ -12,14 +12,20 @@
     </div>
     <div class="infobloc">
       <div>{{ book.title }}</div>
-      <div>{{ book.author }}</div>
-      <div>{{ book.page_num }}</div>
     </div>
   </div>
+  <div class = 'read'>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
   <button type="submit">Прочёл</button>
-
   </form>
+  <form method="post">
+    {% csrf_token %}
+    {{ new_attachment.as_p }}
+    {{ new_attachment.page_attachment}}
+  <button type="submit">Добавить цитату</button>
+  </form>
+  </div>
+
 {% endblock %}

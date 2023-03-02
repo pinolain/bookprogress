@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from booktracker.models import Author, BookUsers, Book, Progres, Attachment
-from booktracker.forms import BookForm, ProgresForm, ProgresFormBook, AuthorForm
+from booktracker.forms import BookForm, ProgresForm, ProgresFormBook, AuthorForm, AttachmentsForm
 # Create your views here.
 @login_required
 def book_list(request):
@@ -33,9 +33,9 @@ def add_book(request):
         return render(request, "booktracker/add_book.html", {'form': book})
 
 
-def mybooks(request):
+def my_books(request):
     mybooks = BookUsers.objects.filter(user_id=request.user.id)
-    return render(request, "booktracker/user_book_list.html", {'mybooks': mybooks})
+    return render(request, "booktracker/user_book_list.html", {'mybook': mybooks})
 
 
 def book_read(request, id):
@@ -50,9 +50,12 @@ def book_read(request, id):
         else:
             start_page = 0
         form = ProgresFormBook(initial={'start_page': start_page})
+        new_attachment = AttachmentsForm()
 
-        return render(request, 'booktracker/book.html', {'form': form, 'book': book})
+        return render(request, 'booktracker/book.html', {'form': form, 'book': book, 'new_attachment': new_attachment})
+
     progres = ProgresFormBook(request.POST)
+
     if progres.is_valid():
         instance = progres.save(commit=False)
         instance.user = request.user
@@ -63,11 +66,4 @@ def book_read(request, id):
 
 def add_book_to_list(request, id):
     book_user = BookUsers.objects.create(user=request.user, book_id=id)
-    return redirect(mybooks)
-
-def add_attachment(request, id):
-
-
-
-
-
+    return redirect(my_books)

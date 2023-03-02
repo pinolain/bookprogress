@@ -7,8 +7,7 @@ urlpatterns = [
     path('booklist', views.book_list),
     path('login/', LoginView.as_view()),
     path('addbook/', views.add_book),
-    path('mybooks', views.mybooks),
+    path('mybooks', views.my_books),
     path('book/<int:id>', views.book_read),
     path('book/<int:id>/add', views.add_book_to_list),
-    path('book/<int:id>/add_attachment', views.add_attachment)
 ]

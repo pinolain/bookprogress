@@ -1,5 +1,5 @@
 from django import forms
-from .models import Author, Book, Progres
+from .models import Author, Book, Progres, Attachment
 from django.core.exceptions import ValidationError
 
 
@@ -12,6 +12,7 @@ class AuthorForm(forms.ModelForm):
 class BookForm(forms.ModelForm):
     new_author = forms.CharField(max_length=155, label='Имя автора', required=False)
     #author = forms.ModelChoiceField(required=False, queryset=Author.objects.all())
+
     class Meta:
         model = Book
         fields = "__all__"
@@ -25,7 +26,6 @@ class BookForm(forms.ModelForm):
         return data
 
 
-
 class ProgresForm(forms.ModelForm):
     class Meta:
         model = Progres
@@ -36,3 +36,11 @@ class ProgresFormBook(forms.ModelForm):
     class Meta:
         model = Progres
         exclude = ("user", "book")
+
+
+class AttachmentsForm(forms.ModelForm):
+    text = forms.CharField(widget=forms.Textarea({"rows": 5, 'style': 'resize:none;'}))
+
+    class Meta:
+        model = Attachment
+        exclude = ("user", "bookusers")

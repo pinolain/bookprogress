@@ -14,7 +14,6 @@ class BookList(View):
 
 
 class AddBook(View):
-
     def get(self, request, *args, **kwargs):
         form = BookForm()
         return render(request, "booktracker/add_book.html", {'form': form})
@@ -71,6 +70,10 @@ class CreateBookProgress(FormView):
         return {'start_page': start_page}
 
     def get_success_url(self):
+        """
+        
+        :return:
+        """
         return f'/cbv/book/{self.kwargs.get("id")}'
 
     def form_valid(self, form):
